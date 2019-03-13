@@ -17,13 +17,17 @@ head(metadata(colData(ov))[["subtypes"]])
 ovtcgabio <- GDCquery_clinic("TCGA-OV", type = "clinical", save.csv = TRUE)
 #subtypes
 subtypes <- PanCancerAtlas_subtypes()
-> DT::datatable(subtypes,
+DT::datatable(subtypes,
                 +               filter = 'top',
                 +               options = list(scrollX = TRUE, keys = TRUE, pageLength = 5),
                 +               rownames = FALSE)
-> ovtcgabio <- GDCquery_clinic("TCGA-OV", type = "clinical", save.csv = TRUE)
+ovtcgabio <- GDCquery_clinic("TCGA-OV", type = "clinical", save.csv = TRUE)
 
-#RCTA
+#RCTGCA
+if (!requireNamespace("BiocManager"))
+  install.packages("BiocManager")
+BiocManager::install("RTCGAToolbox") 
+library(RTCGAToolbox)
 ovrtcg <- getFirehoseData(dataset="OV",
                           forceDownload=TRUE, clinical=TRUE, Mutation=TRUE, RPPAArray = TRUE)
 
@@ -42,7 +46,7 @@ discrep <- mapply(setdiff, ov, ovtcgabio)
 library(curatedTCGAData)
 library(TCGAutils)
 library(TCGAbiolinks)
-library(RCTGAtoolbox)
+library(RTCGAtoolbox)
 
 curatedTCGAData("OV", c("RNA*", "RPPA*", "Mutations"), dry.run = TRUE)
 
@@ -58,11 +62,11 @@ head(metadata(colData(ov))[["subtypes"]])
 ovtcgabio <- GDCquery_clinic("TCGA-OV", type = "clinical", save.csv = TRUE)
 #subtypes
 subtypes <- PanCancerAtlas_subtypes()
-> DT::datatable(subtypes,
+ DT::datatable(subtypes,
                 +               filter = 'top',
                 +               options = list(scrollX = TRUE, keys = TRUE, pageLength = 5),
                 +               rownames = FALSE)
-> ovtcgabio <- GDCquery_clinic("TCGA-OV", type = "clinical", save.csv = TRUE)
+ovtcgabio <- GDCquery_clinic("TCGA-OV", type = "clinical", save.csv = TRUE)
 
 #RCTA
 ovrtcg <- getFirehoseData(dataset="OV",
@@ -70,7 +74,8 @@ ovrtcg <- getFirehoseData(dataset="OV",
 stddata <- getFirehoseRunningDates()
 brcaov <- getFirehoseData(dataset="OV",
                           forceDownload=TRUE, clinical=TRUE, Mutation=TRUE)
-
+clinov <- getData(brcaov, "clinical")
+names(clinov)
 
 intersect(rownames(colData(ov)), )
 
